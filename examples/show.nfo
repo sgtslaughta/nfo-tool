@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<episodedetails>
+  <plot>As the SAS's reputation spreads among the Axis Italian and German forces, another daring mission results in a shocking and devastating loss to the team.</plot>
+  <lockdata>false</lockdata>
+  <dateadded>2022-12-13 04:16:17</dateadded>
+  <title>Episode 4</title>
+  <originaltitle>Episode 4</originaltitle>
+  <year>2022</year>
+  <imdbid>tt11229926</imdbid>
+  <tvdbid>9378521</tvdbid>
+  <runtime>58</runtime>
+  <art>
+    <poster>/data/media/tv/adult/SAS Rogue Heroes/Season 1/SAS Rogue Heroes - S01E04 - Episode 4 Bluray-1080p-thumb.jpg</poster>
+  </art>
+  <showtitle>SAS Rogue Heroes</showtitle>
+  <episode>4</episode>
+  <season>1</season>
+  <aired>2022-11-20</aired>
+  <fileinfo>
+    <streamdetails>
+      <video>
+        <codec>hevc</codec>
+        <micodec>hevc</micodec>
+        <bitrate>4454607</bitrate>
+        <width>1920</width>
+        <height>872</height>
+        <aspect>240:109</aspect>
+        <aspectratio>240:109</aspectratio>
+        <framerate>25</framerate>
+        <scantype>progressive</scantype>
+        <default>True</default>
+        <forced>False</forced>
+        <duration>57</duration>
+        <durationinseconds>3479</durationinseconds>
+      </video>
+      <audio>
+        <codec>ac3</codec>
+        <micodec>ac3</micodec>
+        <bitrate>448000</bitrate>
+        <language>eng</language>
+        <scantype>progressive</scantype>
+        <channels>6</channels>
+        <samplingrate>48000</samplingrate>
+        <default>True</default>
+        <forced>False</forced>
+      </audio>
+      <subtitle>
+        <codec>subrip</codec>
+        <micodec>subrip</micodec>
+        <width>0</width>
+        <height>0</height>
+        <language>eng</language>
+        <scantype>progressive</scantype>
+        <default>False</default>
+        <forced>False</forced>
+      </subtitle>
+    </streamdetails>
+  </fileinfo>
+</episodedetails>

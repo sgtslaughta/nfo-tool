@@ -1,0 +1,35 @@
+{
+  "title": "Inception",
+  "originalTitle": "Inception",
+  "year": 2010,
+  "plot": "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+  "runtime": 148,
+  "genres": ["Action", "Sci-Fi", "Thriller"],
+  "director": "Christopher Nolan",
+  "studio": "Warner Bros. Pictures",
+  "rating": 8.8,
+  "imdbRating": 8.8,
+  "tagline": "Your mind is the scene of the crime",
+  "cast": [
+    {
+      "name": "Leonardo DiCaprio",
+      "role": "Dom Cobb"
+    },
+    {
+      "name": "Marion Cotillard", 
+      "role": "Mal"
+    },
+    {
+      "name": "Tom Hardy",
+      "role": "Eames"
+    }
+  ],
+  "premiered": "2010-07-16",
+  "dateAdded": "2024-01-15T10:30:00Z",
+  "lastPlayed": "2024-01-18T19:45:00Z",
+  "playCount": 2,
+  "metadata": {
+    "source": "TMDB",
+    "lastUpdated": "2024-01-15T10:30:00Z"
+  }
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tvshow>
+    <title>Breaking Bad</title>
+    <originaltitle>Breaking Bad</originaltitle>
+    <showtitle>Breaking Bad</showtitle>
+    <year>2008</year>
+    <plot>A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future.</plot>
+    <genre>Crime</genre>
+    <genre>Drama</genre>
+    <genre>Thriller</genre>
+    <studio>AMC</studio>
+    <rating>9.5</rating>
+    <imdb_rating>9.5</imdb_rating>
+    <premiered>2008-01-20</premiered>
+    <ended>2013-09-29</ended>
+    <status>Ended</status>
+    <seasons>5</seasons>
+    <episodes>62</episodes>
+    <creator>Vince Gilligan</creator>
+    <cast>
+        <actor>
+            <name>Bryan Cranston</name>
+            <role>Walter White</role>
+        </actor>
+        <actor>
+            <name>Aaron Paul</name>
+            <role>Jesse Pinkman</role>
+        </actor>
+    </cast>
+    <dateadded>2024-01-10 15:20:00</dateadded>
+</tvshow>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<movie>
+    <title>The Matrix</title>
+    <originaltitle>The Matrix</originaltitle>
+    <sorttitle>Matrix, The</sorttitle>
+    <year>1999</year>
+    <plot>A computer programmer discovers that reality as he knows it is a simulation controlled by sentient machines, and joins a rebellion to free humanity from their virtual prison.</plot>
+    <runtime>136</runtime>
+    <genre>Action</genre>
+    <genre>Sci-Fi</genre>
+    <director>The Wachowskis</director>
+    <studio>Warner Bros. Pictures</studio>
+    <rating>8.7</rating>
+    <imdb_rating>8.7</imdb_rating>
+    <tagline>Free your mind</tagline>
+    <cast>
+        <actor>
+            <name>Keanu Reeves</name>
+            <role>Neo</role>
+        </actor>
+        <actor>
+            <name>Laurence Fishburne</name>
+            <role>Morpheus</role>
+        </actor>
+        <actor>
+            <name>Carrie-Anne Moss</name>
+            <role>Trinity</role>
+        </actor>
+    </cast>
+    <premiered>1999-03-31</premiered>
+    <dateadded>2024-01-15 10:30:00</dateadded>
+    <lastplayed>2024-01-20 20:15:30</lastplayed>
+    <playcount>3</playcount>
+</movie>

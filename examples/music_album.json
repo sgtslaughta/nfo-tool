@@ -1,0 +1,36 @@
+{
+  "album": "OK Computer",
+  "artist": "Radiohead",
+  "albumArtist": "Radiohead",
+  "year": 1997,
+  "genre": ["Alternative Rock", "Art Rock"],
+  "label": "Parlophone",
+  "tracks": [
+    {
+      "number": 1,
+      "title": "Airbag",
+      "duration": 284
+    },
+    {
+      "number": 2, 
+      "title": "Paranoid Android",
+      "duration": 383
+    },
+    {
+      "number": 3,
+      "title": "Subterranean Homesick Alien",
+      "duration": 267
+    },
+    {
+      "number": 4,
+      "title": "Exit Music (For a Film)",
+      "duration": 263
+    }
+  ],
+  "totalTracks": 12,
+  "totalDuration": 3234,
+  "rating": 9.5,
+  "description": "Widely regarded as one of the greatest albums of all time, OK Computer marked Radiohead's evolution into experimental territory.",
+  "dateAdded": "2024-01-12T14:20:00Z",
+  "lastPlayed": "2024-01-25T16:30:00Z"
+}
