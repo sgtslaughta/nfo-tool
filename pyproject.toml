@@ -7,6 +7,12 @@ requires-python = ">=3.12"
 dependencies = [
     "lxml>=4.9.0",
     "chardet>=5.0.0",
+    "click>=8.1.0",              # Modern CLI framework
+    "rich>=13.0.0",              # Beautiful terminal output
+    "textual>=0.50.0",           # Advanced TUI framework
+    "pydantic>=2.0.0",           # Config validation  
+    "pyyaml>=6.0",               # YAML support
+    "typer-config>=1.0.0",       # Enhanced config integration
 ]
 authors = [
     {name = "NFO Editor", email = "nfo@example.com"},
@@ -32,7 +38,7 @@ dev = [
 ]
 
 [project.scripts]
-nfo-editor = "main:main"
+nfo-editor = "nfo_editor.cli.main:main"
 
 [build-system]
 requires = ["hatchling"]
