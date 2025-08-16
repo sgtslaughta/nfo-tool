@@ -11,15 +11,10 @@ from typing import Optional, Tuple, Dict, Any
 import click
 from rich.console import Console
 from rich.table import Table
-from rich.progress import Progress, TaskID, SpinnerColumn, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn
-from rich.panel import Panel
-from rich.live import Live
-from rich.layout import Layout
-from rich.text import Text
 import json
-import time
 
 from nfo_editor import edit_nfo_files, NFOError
+from ..formatting.progress import BatchProgressTracker, OperationType
 
 console = Console()
 
@@ -223,56 +218,85 @@ def execute_edit_with_progress(directories: list, field_updates: Dict[str, Any],
     Returns:
         Edit operation results
     """
-    # Create progress display
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-        TimeElapsedColumn(),
-        TimeRemainingColumn(),
+    # Create progress tracker
+    tracker = BatchProgressTracker(
         console=console,
-        refresh_per_second=4
-    ) as progress:
-        
-        # Add overall progress task
-        overall_task = progress.add_task(
-            "[cyan]Editing NFO files...", 
-            total=100
-        )
-        
-        # Simulate progress tracking (in real implementation, this would be integrated with the core library)
-        console.print(Panel(
-            "[yellow]🚧 Progress tracking integration coming soon![/yellow]\n"
-            "Currently showing simulated progress for demonstration.",
-            title="Progress Demo",
-            border_style="yellow"
-        ))
-        
-        # Show progress simulation
-        for i in range(101):
-            progress.update(overall_task, completed=i)
-            time.sleep(0.02)  # Simulate work
-            
-            if i == 25:
-                progress.update(overall_task, description="[cyan]Scanning for NFO files...")
-            elif i == 50:
-                progress.update(overall_task, description="[cyan]Processing files...")
-            elif i == 75:
-                progress.update(overall_task, description="[cyan]Creating backups...")
-            elif i == 95:
-                progress.update(overall_task, description="[cyan]Finalizing...")
-        
-        progress.update(overall_task, description="[green]✅ Edit operation completed!")
-        time.sleep(0.5)  # Show completion
-    
-    # Execute actual edit operation
-    return edit_nfo_files(
-        directories=directories,
-        field_updates=field_updates,
-        backup=backup,
-        dry_run=False,
-        file_pattern=file_pattern,
-        output_format=output_format,
-        max_files=max_files
+        operation_type=OperationType.EDIT,
+        show_speed=True,  # Show processing speed for edit operations
+        show_eta=True
     )
+    
+    # First, do a quick scan to estimate the number of files
+    console.print("[dim]Scanning for NFO files to edit...[/dim]")
+    try:
+        from nfo_editor import scan_nfo_files
+        scan_result = scan_nfo_files(
+            directories=directories,
+            pattern=file_pattern or "*.nfo",
+            recursive=True
+        )
+        estimated_files = len(scan_result.get('nfo_files', []))
+        
+        # Apply max_files limit if specified
+        if max_files and estimated_files > max_files:
+            estimated_files = max_files
+            
+    except Exception:
+        # Fallback to directory count if scan fails
+        estimated_files = len(directories)
+    
+    # Use progress tracking context manager
+    with tracker.track_operation(
+        total_items=estimated_files,
+        operation_description="Editing NFO files",
+        show_summary=True
+    ) as progress_tracker:
+        
+        # For now, we'll simulate the edit progress since the core edit_nfo_files 
+        # function doesn't support progress callbacks yet
+        # In a future version, this would integrate with the core library
+        
+        files_processed = 0
+        
+        # Update progress in chunks to simulate file processing
+        chunk_size = max(1, estimated_files // 10)  # Update in 10% chunks
+        
+        try:
+            # Execute the actual edit operation
+            result = edit_nfo_files(
+                directories=directories,
+                field_updates=field_updates,
+                backup=backup,
+                dry_run=False,
+                file_pattern=file_pattern,
+                output_format=output_format,
+                max_files=max_files
+            )
+            
+            # Simulate progress updates based on result
+            actual_files = result.get('total_files', estimated_files)
+            successful = result.get('successful_edits', 0)
+            failed = result.get('failed_edits', 0)
+            
+            # Update progress to show completion
+            for i in range(0, actual_files, chunk_size):
+                end_chunk = min(i + chunk_size, actual_files)
+                files_in_chunk = end_chunk - i
+                
+                # Update progress
+                progress_tracker.update_progress(
+                    completed=files_in_chunk,
+                    description="Processing files",
+                    current_item=f"Files {end_chunk}/{actual_files}"
+                )
+            
+            # Add any errors from the result
+            if result.get('errors'):
+                for error in result['errors']:
+                    progress_tracker.add_error(error)
+                    
+            return result
+            
+        except Exception as e:
+            progress_tracker.add_error(f"Edit operation failed: {str(e)}")
+            raise

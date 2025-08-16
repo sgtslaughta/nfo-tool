@@ -13,6 +13,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 from rich.syntax import Syntax
+from ..formatting.syntax import format_nfo_content, highlight_json, highlight_xml
 from rich.tree import Tree
 from rich.columns import Columns
 from rich.text import Text
@@ -137,10 +138,10 @@ def display_json_output(result: dict, fields: Tuple[str, ...]):
     else:
         filtered_data = result
     
-    # Display with syntax highlighting
+    # Display with enhanced syntax highlighting
     json_str = json.dumps(filtered_data, indent=2, default=str)
-    syntax = Syntax(json_str, "json", theme="monokai", line_numbers=True)
-    console.print(syntax)
+    highlighted_json = highlight_json(json_str, title="📄 NFO Data (JSON)")
+    console.print(highlighted_json)
 
 
 def display_yaml_output(result: dict, fields: Tuple[str, ...]):
@@ -157,10 +158,11 @@ def display_yaml_output(result: dict, fields: Tuple[str, ...]):
     else:
         filtered_data = result
     
-    # Display with syntax highlighting
+    # Display with enhanced syntax highlighting
     yaml_str = yaml.dump(filtered_data, default_flow_style=False, allow_unicode=True)
-    syntax = Syntax(yaml_str, "yaml", theme="monokai", line_numbers=True)
-    console.print(syntax)
+    from ..formatting.syntax import highlight_yaml
+    highlighted_yaml = highlight_yaml(yaml_str, title="📄 NFO Data (YAML)")
+    console.print(highlighted_yaml)
 
 
 def format_field_value(value) -> str:
@@ -292,38 +294,13 @@ def display_file_content_preview(file_path: str, format_type: str):
             console.print(f"[red]Error reading file:[/red] {e}")
             return
     
-    # Limit content length for display
-    if len(content) > 2000:
-        content = content[:2000] + "\n... [content truncated]"
-    
-    # Determine syntax highlighting language
-    if format_type.lower() == 'xml':
-        language = 'xml'
-        theme = 'monokai'
-    elif format_type.lower() == 'json':
-        language = 'json'  
-        theme = 'monokai'
-    else:
-        language = 'text'
-        theme = 'github-dark'
-    
-    # Create syntax highlighted display
-    syntax = Syntax(
-        content, 
-        language, 
-        theme=theme,
-        line_numbers=True,
-        word_wrap=False,
-        background_color="default"
-    )
-    
-    # Display in a panel
-    content_panel = Panel(
-        syntax,
+    # Use the new syntax highlighting function
+    highlighted_content = format_nfo_content(
+        content=content,
+        format_type=format_type,
         title=f"📄 Raw Content ({format_type.upper()})",
-        border_style="dim",
-        expand=False
+        show_panel=True
     )
     
     console.print()
-    console.print(content_panel)
+    console.print(highlighted_content)

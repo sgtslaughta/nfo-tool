@@ -11,12 +11,11 @@ from typing import Optional, Tuple
 import click
 from rich.console import Console
 from rich.table import Table
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeElapsedColumn
-from rich.panel import Panel
 import json
-import time
 
 from nfo_editor import scan_nfo_files, NFOError
+from ..formatting.progress import BatchProgressTracker, OperationType
+from ..formatting.tables import ScanResultTable
 
 console = Console()
 
@@ -118,49 +117,67 @@ def execute_scan_with_progress(directories: list, pattern: Optional[str], recurs
     Returns:
         Scan operation results
     """
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-        TimeElapsedColumn(),
+    # Create progress tracker
+    tracker = BatchProgressTracker(
         console=console,
-        refresh_per_second=4
-    ) as progress:
-        
-        # Add progress task for each directory
-        total_dirs = len(directories)
-        overall_task = progress.add_task(
-            f"[cyan]Scanning {total_dirs} directories...",
-            total=total_dirs
-        )
-        
-        # Simulate progress for demonstration
-        console.print(Panel(
-            "[yellow]🚧 Enhanced progress tracking coming soon![/yellow]\n"
-            "Currently showing simulated progress for multiple directories.",
-            title="Progress Demo",
-            border_style="yellow"
-        ))
-        
-        for i, directory in enumerate(directories):
-            progress.update(
-                overall_task, 
-                completed=i,
-                description=f"[cyan]Scanning {directory}..."
-            )
-            time.sleep(0.3)  # Simulate directory scan time
-        
-        progress.update(
-            overall_task, 
-            completed=total_dirs,
-            description="[green]✅ Scan completed!"
-        )
-        time.sleep(0.5)
-    
-    # Execute actual scan operation
-    return scan_nfo_files(
-        directories=directories,
-        pattern=pattern,
-        recursive=recursive
+        operation_type=OperationType.SCAN,
+        show_speed=False,
+        show_eta=True
     )
+    
+    # Use progress tracking context manager
+    with tracker.track_operation(
+        total_items=len(directories),
+        operation_description="Scanning directories for NFO files",
+        show_summary=True
+    ) as progress_tracker:
+        
+        # Scan each directory with progress updates
+        all_results = {
+            'nfo_files': [],
+            'directories_scanned': 0,
+            'total_files_scanned': 0,
+            'errors': [],
+            'scan_time_seconds': 0.0
+        }
+        
+        for i, directory in enumerate(directories, 1):
+            try:
+                # Update progress with current directory
+                progress_tracker.update_progress(
+                    completed=0,  # Don't advance yet
+                    current_item=f"Scanning {directory}"
+                )
+                
+                # Execute scan for this directory
+                dir_result = scan_nfo_files(
+                    directories=[directory],
+                    pattern=pattern,
+                    recursive=recursive
+                )
+                
+                # Aggregate results
+                all_results['nfo_files'].extend(dir_result.get('nfo_files', []))
+                all_results['directories_scanned'] += dir_result.get('directories_scanned', 0)
+                all_results['total_files_scanned'] += dir_result.get('total_files_scanned', 0)
+                all_results['errors'].extend(dir_result.get('errors', []))
+                all_results['scan_time_seconds'] += dir_result.get('scan_time_seconds', 0.0)
+                
+                # Update progress as completed
+                progress_tracker.update_progress(
+                    completed=1,
+                    current_item=f"✅ {directory} ({len(dir_result.get('nfo_files', []))} files)"
+                )
+                
+            except Exception as e:
+                error_msg = f"Error scanning {directory}: {str(e)}"
+                progress_tracker.add_error(error_msg, directory)
+                all_results['errors'].append(error_msg)
+                
+                # Still advance progress for failed directory
+                progress_tracker.update_progress(
+                    completed=1,
+                    current_item=f"❌ {directory} (failed)"
+                )
+        
+        return all_results

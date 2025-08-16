@@ -1,0 +1,118 @@
+# NFO Editor Configuration File
+# ================================
+#
+# This file controls all aspects of NFO Editor behavior.
+# Place this file in one of these locations:
+#   - Current directory: nfo-editor.yaml
+#   - Home directory: ~/.nfo-editor.yaml
+#   - XDG config: ~/.config/nfo-editor/config.yaml
+#
+# Generated on: 2025-08-16 14:01:03
+# For full documentation: https://github.com/your-repo/nfo-editor
+
+# Configuration file version (for compatibility checking)
+version: "2.0"
+
+# Default operating mode when no arguments are provided
+# Options: 'interactive' (TUI interface) or 'cli' (show help)
+default_mode: interactive
+
+# Directory Configuration
+# ======================
+# Define where your NFO files are located. Use ~ for home directory.
+# These directory names can be referenced in profiles.
+
+directories:
+  # Path to movie NFO files
+  movies: /media/movies
+  # Path to TV show NFO files
+  tv: /media/tv-shows
+  # Path to music album NFO files
+  music: /media/music
+  # Custom named directories for specialized collections
+  custom_dirs:
+    documentaries: /media/documentaries
+    anime: /media/anime
+    concerts: /media/concerts
+
+# Rich Terminal Display Configuration
+# ===================================
+# Controls the appearance and behavior of terminal output
+
+rich:
+  # Color theme: 'auto', 'dark', 'light', 'monokai'
+  # 'auto' detects terminal preferences automatically
+  theme: auto
+
+  # Show progress bars during batch operations
+  # Set to false for scripting or CI environments
+  show_progress: true
+
+  # When to use colored output: 'auto', 'always', 'never'
+  color_output: auto
+
+  # Table border style: 'rounded', 'heavy', 'double', 'simple', 'minimal'
+  table_style: rounded
+
+  # Maximum characters to show in content preview (100-10000)
+  max_content_preview: 2000
+
+  # Enable syntax highlighting for NFO content display
+  syntax_highlighting: true
+
+scan:
+  # Glob pattern for matching NFO files
+  pattern: "*.nfo"
+  # Scan subdirectories recursively
+  recursive: true
+  # Maximum directory depth (null = unlimited)
+  max_depth: null
+  # Follow symbolic links
+  follow_symlinks: false
+  # Patterns to ignore during scanning
+  ignore_patterns:
+    - ".*"
+    - "__pycache__"
+    - "*.tmp"
+    - "*.bak"
+
+edit:
+  # Create backup files before editing
+  backup: true
+  # Directory for backups (null = same as original)
+  backup_dir: null
+  # Default output format (null = preserve original)
+  output_format: null
+  # Preserve original format when editing
+  preserve_format: true
+  # Maximum files to process in single batch
+  max_files: 1000
+  # Enable dry-run mode by default
+  dry_run_default: false
+
+profiles:
+  # Movie cleanup profile
+  - name: movie_cleanup
+    description: "Clean and standardize movie NFO files"
+    directories: ["movies"]
+    field_updates:
+      updated: "{{now}}"
+      studio: "Various"
+    patterns: ["*movie*.nfo"]
+
+  # TV show profile
+  - name: tv_standardize
+    description: "Standardize TV show information"
+    directories: ["tv"]
+    field_updates:
+      format: "TV Series"
+      updated: "{{now}}"
+
+# Environment variable prefix
+env_prefix: "NFO_EDITOR_"
+
+# Plugin configuration (reserved)
+plugins: {}
+
+# Custom configuration values
+custom: {}
